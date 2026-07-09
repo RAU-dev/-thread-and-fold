@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Thread & Fold — Considered Clothing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B1B1B;
+    --sand:#EFE7D6;
+    --rust:#C1502E;
+    --sage:#7A8B69;
+    --cream:#FAF7F0;
+    --line: rgba(27,27,27,0.14);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display { font-family:'Fraunces', serif; }
+  .mono { font-family:'JetBrains Mono', monospace; letter-spacing:0.03em; }
+
+  a { color:inherit; }
+
+  /* ---------- HEADER ---------- */
+  header {
+    background:var(--cream);
+    border-bottom:1px solid var(--line);
+    padding:22px 48px;
+    display:flex; justify-content:space-between; align-items:center;
+    position:sticky; top:0; z-index:10; backdrop-filter:blur(6px);
+  }
+  header .logo { font-size:22px; font-weight:600; letter-spacing:-0.01em; }
+  header .logo span { color:var(--rust); }
+  nav { display:flex; gap:32px; }
+  nav a { font-size:13px; text-transform:uppercase; letter-spacing:0.08em; text-decoration:none; color:var(--ink); position:relative; }
+  nav a::after{ content:""; position:absolute; left:0; bottom:-4px; width:0; height:1px; background:var(--rust); transition:width .25s ease; }
+  nav a:hover::after{ width:100%; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding:70px 48px 0;
+    display:grid; grid-template-columns:1.15fr 1fr; gap:56px; align-items:center;
+    border-bottom:1px solid var(--line);
+  }
+  .hero .eyebrow { font-size:12px; text-transform:uppercase; letter-spacing:0.18em; color:var(--sage); margin-bottom:18px; }
+  .hero h2 {
+    font-size:clamp(42px,6vw,76px);
+    line-height:0.98;
+    font-weight:400;
+    letter-spacing:-0.02em;
+  }
+  .hero h2 em { font-style:italic; color:var(--rust); font-weight:500; }
+  .hero .sub { margin-top:26px; max-width:420px; font-size:16px; line-height:1.6; color:rgba(27,27,27,0.7); }
+  .hero .cta {
+    margin-top:32px; display:inline-block;
+    background:var(--ink); color:var(--cream);
+    padding:14px 28px; font-size:13px; text-transform:uppercase; letter-spacing:0.08em;
+    text-decoration:none; border-radius:2px;
+  }
+  .hero .left-col { padding-bottom:70px; }
+  .hero .frame {
+    position:relative;
+    align-self:stretch;
+    height:100%;
+    min-height:460px;
+  }
+  .hero .frame img {
+    width:100%; height:100%; object-fit:cover;
+    filter:sepia(0.12) saturate(1.05) contrast(1.02);
+    display:block;
+  }
+  .hero .frame .frame-tag {
+    position:absolute; left:18px; bottom:18px;
+    background:var(--cream); color:var(--ink);
+    padding:8px 14px; font-size:11px; text-transform:uppercase; letter-spacing:0.1em;
+    border:1px solid var(--ink);
+  }
+  .hero .frame::before{
+    content:""; position:absolute; inset:14px;
+    border:1px solid rgba(250,247,240,0.5);
+    pointer-events:none; z-index:2;
+  }
+
+  /* ---------- CATEGORY STRIP ---------- */
+  .strip {
+    display:flex; overflow-x:auto; gap:0;
+    border-bottom:1px solid var(--line);
+  }
+  .strip span {
+    flex:1; text-align:center; padding:16px 10px;
+    font-size:12px; text-transform:uppercase; letter-spacing:0.12em;
+    border-right:1px solid var(--line);
+    white-space:nowrap; color:rgba(27,27,27,0.65);
+  }
+  .strip span:last-child{ border-right:none; }
+
+  /* ---------- PRODUCTS ---------- */
+  .section-head {
+    padding:56px 48px 10px;
+    display:flex; justify-content:space-between; align-items:baseline;
+  }
+  .section-head h3 { font-size:30px; font-weight:400; }
+  .section-head .count { font-size:12px; color:rgba(27,27,27,0.5); }
+
+  .products {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:1px; background:var(--line);
+    margin:24px 48px 70px; border:1px solid var(--line);
+  }
+  .card {
+    background:var(--cream);
+    padding:0 0 22px;
+    position:relative;
+    display:flex; flex-direction:column;
+  }
+  .card .photo {
+    height:320px; overflow:hidden; margin-bottom:18px;
+    position:relative;
+  }
+  .card .photo img {
+    width:100%; height:100%; object-fit:cover;
+    filter:sepia(0.14) saturate(1.05) contrast(1.02);
+    transition:transform .5s ease;
+    display:block;
+  }
+  .card:hover .photo img { transform:scale(1.04); }
+  .card h4 { font-size:17px; font-weight:400; margin-bottom:4px; padding:0 22px; }
+  .card .meta { font-size:12px; color:rgba(27,27,27,0.55); margin-bottom:14px; padding:0 22px; }
+
+  .price-tag {
+    position:absolute; top:16px; right:16px; z-index:3;
+    background:var(--sand); border:1px solid var(--ink);
+    padding:6px 10px; font-size:13px; font-weight:700;
+    transform:rotate(4deg);
+    box-shadow:2px 2px 0 var(--ink);
+  }
+  .card:nth-child(even) .price-tag{ transform:rotate(-4deg); }
+
+  .card button {
+    margin-top:auto; width:calc(100% - 44px); margin-left:22px; margin-right:22px; padding:12px;
+    background:transparent; color:var(--ink);
+    border:1px solid var(--ink); border-radius:2px;
+    font-size:12px; text-transform:uppercase; letter-spacing:0.08em;
+    cursor:pointer; transition:.2s ease;
+  }
+  .card button:hover{ background:var(--ink); color:var(--cream); }
+
+  /* ---------- LOOKBOOK BAND ---------- */
+  .lookbook {
+    position:relative;
+    color:var(--cream);
+    padding:70px 48px; display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center;
+    overflow:hidden;
+  }
+  .lookbook .bg-img {
+    position:absolute; inset:0; z-index:0;
+  }
+  .lookbook .bg-img img {
+    width:100%; height:100%; object-fit:cover;
+    filter:grayscale(0.3) brightness(0.55);
+  }
+  .lookbook .bg-img::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(100deg, rgba(27,27,27,0.94) 0%, rgba(27,27,27,0.75) 42%, rgba(27,27,27,0.35) 100%);
+  }
+  .lookbook > div, .lookbook > p { position:relative; z-index:1; }
+  .lookbook h3 { font-size:32px; font-weight:400; line-height:1.2; }
+  .lookbook p { margin-top:16px; color:rgba(250,247,240,0.68); font-size:15px; line-height:1.7; max-width:420px; }
+  .lookbook .tag { font-size:12px; text-transform:uppercase; letter-spacing:0.15em; color:var(--sage); margin-bottom:14px; }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    padding:40px 48px; display:flex; justify-content:space-between; align-items:center;
+    font-size:12px; color:rgba(27,27,27,0.55);
+    border-top:1px solid var(--line);
+  }
+  footer .logo-mini { font-family:'Fraunces', serif; font-size:16px; color:var(--ink); }
+
+  @media (max-width:760px){
+    .hero{ grid-template-columns:1fr; }
+    .lookbook{ grid-template-columns:1fr; }
+    header{ padding:18px 24px; }
+    nav{ display:none; }
+  }
+
+  /* ---------- HACKED OVERLAY ---------- */
+  #hacked-screen {
+    display:none;
+    position:fixed; inset:0; z-index:9999;
+    background:#000;
+    color:#ff0000;
+    font-family:'Courier New', monospace;
+    overflow:hidden;
+  }
+  #hacked-screen.active { display:block; }
+
+  #hacked-screen .scanlines {
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg, rgba(255,0,0,0.03) 0px, rgba(255,0,0,0.03) 1px, transparent 1px, transparent 3px);
+    pointer-events:none;
+  }
+
+  #hacked-screen .content {
+    position:relative; z-index:2;
+    height:100%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    animation: flicker 2.5s infinite;
+  }
+
+  #hacked-screen h1 {
+    font-size:64px;
+    letter-spacing:6px;
+    text-shadow: 0 0 10px #ff0000, 0 0 30px #ff0000;
+    animation: glitch 1.2s infinite;
+  }
+
+  #hacked-screen p.sub {
+    margin-top:20px;
+    font-size:18px;
+    color:#ff6666;
+    letter-spacing:2px;
+  }
+
+  #hacked-screen .skull {
+    font-size:60px;
+    margin-bottom:10px;
+  }
+
+  @keyframes flicker {
+    0%,19%,21%,23%,25%,54%,56%,100% { opacity:1; }
+    20%,24%,55% { opacity:0.7; }
+  }
+
+  @keyframes glitch {
+    0% { transform:translate(0,0); }
+    20% { transform:translate(-2px,2px); }
+    40% { transform:translate(-2px,-2px); }
+    60% { transform:translate(2px,2px); }
+    80% { transform:translate(2px,-2px); }
+    100% { transform:translate(0,0); }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ================= NORMAL SITE ================= -->
+  <header>
+    <div class="logo">Thread<span>&</span>Fold</div>
+    <nav>
+      <a href="#">Women</a>
+      <a href="#">Men</a>
+      <a href="#">Archive</a>
+      <a href="#">Journal</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="left-col">
+      <div class="eyebrow">Autumn Cut — 03</div>
+      <h2>Clothes built<br>to be <em>worn</em>,<br>not just owned.</h2>
+      <p class="sub">Small-batch garments cut from natural fibre, stitched to last a decade rather than a season. Every piece is numbered.</p>
+      <a href="#" class="cta">View the collection</a>
+    </div>
+    <div class="frame">
+      <img src="https://images.unsplash.com/photo-1531169509526-f8f1fdaa4a67?w=900&h=1100&fit=crop&auto=format&q=80" alt="Raw indigo denim, close weave">
+      <div class="frame-tag mono">Run 03 / Unwashed Indigo</div>
+    </div>
+  </section>
+
+  <div class="strip">
+    <span>Outerwear</span>
+    <span>Shirting</span>
+    <span>Trousers</span>
+    <span>Knitwear</span>
+    <span>Footwear</span>
+    <span>Accessories</span>
+  </div>
+
+  <div class="section-head">
+    <h3>Newly cut</h3>
+    <div class="count mono">04 pieces</div>
+  </div>
+
+  <section class="products">
+    <div class="card">
+      <div class="price-tag mono">Rs 3,999</div>
+      <div class="photo">
+        <img src="https://images.unsplash.com/photo-1533230464445-e01ef07c65c5?w=700&h=850&fit=crop&auto=format&q=80" alt="Raw Denim Jacket, unwashed indigo, hanging">
+      </div>
+      <h4>Raw Denim Jacket</h4>
+      <div class="meta">Unwashed indigo · 14oz selvedge</div>
+      <button>Add to bag</button>
+    </div>
+
+    <div class="card">
+      <div class="price-tag mono">Rs 1,799</div>
+      <div class="photo">
+        <img src="https://images.unsplash.com/photo-1556630184-066f7ac4e15f?w=700&h=850&fit=crop&auto=format&q=80" alt="Field Cotton Shirt, undyed poplin, hanging">
+      </div>
+      <h4>Field Cotton Shirt</h4>
+      <div class="meta">Undyed poplin · mother-of-pearl buttons</div>
+      <button>Add to bag</button>
+    </div>
+
+    <div class="card">
+      <div class="price-tag mono">Rs 2,499</div>
+      <div class="photo">
+        <img src="https://images.unsplash.com/photo-1493357335960-4583bfa6f8d9?w=700&h=850&fit=crop&auto=format&q=80" alt="Straight Wool Trouser, undyed merino">
+      </div>
+      <h4>Straight Wool Trouser</h4>
+      <div class="meta">Undyed merino · pressed pleat</div>
+      <button>Add to bag</button>
+    </div>
+
+    <div class="card">
+      <div class="price-tag mono">Rs 4,599</div>
+      <div class="photo">
+        <img src="https://images.unsplash.com/photo-1599012307605-23a0ebe4d321?w=700&h=850&fit=crop&auto=format&q=80" alt="Undyed Canvas Boot, vegetable-tanned sole">
+      </div>
+      <h4>Undyed Canvas Boot</h4>
+      <div class="meta">Vegetable-tanned sole · hand-stitched</div>
+      <button>Add to bag</button>
+    </div>
+  </section>
+
+  <section class="lookbook">
+    <div class="bg-img">
+      <img src="https://images.unsplash.com/photo-1645859610425-f0f4177df5f0?w=1600&h=700&fit=crop&auto=format&q=75" alt="">
+    </div>
+    <div>
+      <div class="tag">The Journal — Entry 12</div>
+      <h3>Why we stopped<br>dyeing past<br>the root.</h3>
+    </div>
+    <p>Every colour in this run comes from onion skin, madder root, and iron liquor — nothing synthetic touches the cloth. It means shirts fade honestly instead of pilling into grey, and no two batches are ever quite the same shade.</p>
+  </section>
+
+  <footer>
+    <div class="logo-mini">Thread&amp;Fold</div>
+    <div>&copy; 2026 — Cut and stitched in small batches.</div>
+  </footer>
+
+  <!-- ================= HACKED OVERLAY (hidden by default) ================= -->
+  <div id="hacked-screen">
+    <div class="scanlines"></div>
+    <div class="content">
+      <div class="skull">☠</div>
+      <h1>SYSTEM HACKED</h1>
+      <p class="sub">by RAU Dev &mdash; access granted</p>
+    </div>
+  </div>
+
+  <!-- ================= SUPABASE REALTIME LISTENER ================= -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://ltcaiybfrsqkniptzcnj.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_YtjW6aM9eOm5aMwewGpGJQ_GynBC0LM";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    function showHacked() {
+      document.getElementById('hacked-screen').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    async function checkInitialState() {
+      const { data, error } = await supabaseClient
+        .from('site_status')
+        .select('hacked')
+        .eq('id', 1)
+        .single();
+      if (!error && data && data.hacked) {
+        showHacked();
+      }
+    }
+
+    // Subscribe to realtime changes on the site_status table
+    supabaseClient
+      .channel('site_status_changes')
+      .on('postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'site_status' },
+        (payload) => {
+          if (payload.new.hacked === true) {
+            showHacked();
+          }
+        }
+      )
+      .subscribe();
+
+    checkInitialState();
+  </script>
+
+</body>
+</html>
